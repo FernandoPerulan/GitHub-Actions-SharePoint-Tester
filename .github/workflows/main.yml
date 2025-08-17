@@ -28,7 +28,5 @@ jobs:
         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         SHAREPOINT_HOSTNAME: ${{ secrets.SHAREPOINT_HOSTNAME }}
         SHAREPOINT_SITE_SEARCH: ${{ secrets.SHAREPOINT_SITE_SEARCH }}
-
-    - name: Run script
       run: python main.py
 
