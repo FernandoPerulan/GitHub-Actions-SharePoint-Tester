@@ -1,0 +1,31 @@
+name: SharePoint test Upload/Download
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sharepoint_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pandas openpyxl
+
+    - name: Run sharepoint test
+      env:
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        SHAREPOINT_HOSTNAME: ${{ secrets.SHAREPOINT_HOSTNAME }}
+        SHAREPOINT_SITE_SEARCH: ${{ secrets.SHAREPOINT_SITE_SEARCH }}
+      run: main.py
