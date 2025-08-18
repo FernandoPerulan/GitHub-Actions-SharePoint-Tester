@@ -11,7 +11,7 @@ def get_cotizaciones(tickers, start_date, end_date=None, providers=None):
         end_date = date.today().strftime("%Y-%m-%d")
 
     if providers is None:
-        providers = ["yfinance", "investing", "stooq", "polygon"]
+        providers = ["yfinance", "investing"]
 
     all_data = []
 
