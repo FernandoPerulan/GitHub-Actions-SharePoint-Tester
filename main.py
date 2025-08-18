@@ -7,6 +7,7 @@ from auth import get_token
 from sharepoint import find_site_id, upload_file, download_file
 from cotizaciones import get_cotizaciones
 
+
 # --- Config desde secrets / env ---
 CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
 CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")
@@ -35,8 +36,15 @@ def main():
         "Fecha": [datetime.today().strftime("%d-%m-%Y")] * 2
     })
     """
-    tickers = ["AAPL", "MSFT", "TSLA", "GGAL.BA"]
+    tickers = [
+    "S13S4","T2X5","S29N4","BPY26","AL30","S30S4","S28F5","S13D4","S31E5","S31M5",
+    "BPOB7","BPOC7","DIA","PAMP","IWM","MELI","YCA6O","BPOD7","S29G5","S18J5",
+    "YPFD","EWZ","TEN","XLE","S30J5","YMCJO","S15G5","T17O5","T15D5","TZX26",
+    "BBD","ABEV","GD35","GD30","GD41","CEPU","S30Y5","VALE","VIST","GOOGL",
+    "TTJ26","TTM26","DE","PBR","JPM","NKE","TM","AL41","AL35","T2X4"]
+    
     df = get_cotizaciones(tickers, start_date="2024-01-01")
+    print("Final shape:", df.shape)
 
     local_upload = "cotizaciones.xlsx"
     df.to_excel(local_upload, index=False)
