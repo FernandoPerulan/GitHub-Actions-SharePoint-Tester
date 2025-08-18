@@ -35,7 +35,7 @@ def main():
         "Fecha": [datetime.today().strftime("%d-%m-%Y")] * 2
     })
     """
-    tickers = ["AAPL", "MSFT", "TSLA"]
+    tickers = ["AAPL", "MSFT", "TSLA", "GGAL.BA"]
     df = get_cotizaciones(tickers, start_date="2024-01-01")
 
     local_upload = "cotizaciones.xlsx"
