@@ -18,9 +18,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install requests pandas openpyxl
-        pip install pandas openbb-terminal alpha_vantage investpy yfinance
+       python -m pip install --upgrade pip
+       pip install pandas openbb alpha_vantage investpy yfinance openpyxl
 
     - name: Run sharepoint test
       env:
