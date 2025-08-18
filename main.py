@@ -2,32 +2,39 @@ from datetime import datetime
 import pandas as pd
 
 # Credentials
+import os
 from auth import get_token
 from sharepoint import find_site_id, upload_file, download_file
-from config import AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, SHAREPOINT_HOSTNAME, SHAREPOINT_SITE_SEARCH
 from cotizaciones import get_cotizaciones
+
+# --- Config desde secrets / env ---
+CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
+CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")
+TENANT_ID = os.getenv("AZURE_TENANT_ID")
+SHAREPOINT_HOSTNAME = os.getenv("SHAREPOINT_HOSTNAME")  # e.g. inspirareconsulting.sharepoint.com
+SITE_SEARCH = os.getenv("SHAREPOINT_SITE_SEARCH")      # e.g. GrupoDONCAYETANO2
 
 # --- Main: crear xlsx de prueba, subir y descargar ---
 def main():
-   
-    if not (AZURE_CLIENT_ID and AZURE_CLIENT_SECRET and AZURE_TENANT_ID and SHAREPOINT_HOSTNAME and SHAREPOINT_SITE_SEARCH):
+
+    if not (CLIENT_ID and CLIENT_SECRET and TENANT_ID and SHAREPOINT_HOSTNAME and SITE_SEARCH):
         raise SystemExit("Faltan variables de entorno (AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID, SHAREPOINT_HOSTNAME, SHAREPOINT_SITE_SEARCH)")
 
-    token = get_token(AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID)
+    token = get_token(CLIENT_ID, CLIENT_SECRET, TENANT_ID)
     print("Token obtenido.")
 
-    site_id = find_site_id(token, SHAREPOINT_HOSTNAME, SHAREPOINT_SITE_SEARCH)
+    site_id = find_site_id(token, SHAREPOINT_HOSTNAME, SITE_SEARCH)
     if not site_id:
         raise SystemExit("No se encontró site_id para la búsqueda dada.")
     print("Site ID:", site_id)
 
-    # Crear un xlsx de prueba con pandas
+    """# Crear un xlsx de prueba con pandas
     df = pd.DataFrame({
         "Nombre": ["Fernando", "Ana"],
         "Valor": [1, 2],
         "Fecha": [datetime.today().strftime("%d-%m-%Y")] * 2
     })
-
+    """
     tickers = ["AAPL", "MSFT", "TSLA"]
     df = get_cotizaciones(tickers, start_date="2024-01-01")
 
