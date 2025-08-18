@@ -38,15 +38,21 @@ def get_cotizaciones(tickers, start_date, end_date=None, providers=None):
             print(f"{symbol}: sin datos en ningún provider, se salta.")
             continue
 
-        # --- Normalizar columnas ---
+        # --- Normalizar columna de fecha ---
         if isinstance(df.index, pd.DatetimeIndex):
-            df = df.reset_index().rename(columns={"index": "date"})
-        if "date" not in df.columns:
-            for col in df.columns:
-                if pd.api.types.is_datetime64_any_dtype(df[col]):
-                    df = df.rename(columns={col: "date"})
-                    break
+            df = df.reset_index().rename(columns={"index": "Fecha"})
+        elif "date" in df.columns:
+            df = df.rename(columns={"date": "Fecha"})
+        else:
+            # buscar cualquier columna datetime
+            fecha_col = next((c for c in df.columns if pd.api.types.is_datetime64_any_dtype(df[c])), None)
+            if fecha_col:
+                df = df.rename(columns={fecha_col: "Fecha"})
+            else:
+                print(f"{symbol}: no se encontró columna de fecha, se salta.")
+                continue
 
+        # --- Detectar columna Close ---
         close_col = next((c for c in ["Close","close","Adj Close","adjClose","adj_close","AdjClose"] if c in df.columns), None)
         if close_col is None:
             for c in df.columns:
@@ -57,13 +63,15 @@ def get_cotizaciones(tickers, start_date, end_date=None, providers=None):
             print(f"{symbol}: no se encontró columna Close, se salta.")
             continue
 
+        # --- Detectar columna Dividend ---
         div_col = next((c for c in ["Dividends","dividends","Dividend","dividend"] if c in df.columns), None)
 
+        # --- Crear DataFrame de salida ---
         out = pd.DataFrame({
-            "Fecha": pd.to_datetime(df["date"]).dt.strftime("%d-%m-%Y"),
+            "Fecha": pd.to_datetime(df["Fecha"]).dt.strftime("%d-%m-%Y"),
             "Ticker": symbol,
             "Close": df[close_col].astype(float),
-            "Dividend": (df[div_col].astype(float) if div_col else 0.0)
+            "Dividend": df[div_col].astype(float) if div_col else 0.0
         })
 
         all_data.append(out)
