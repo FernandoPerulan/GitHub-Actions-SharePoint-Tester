@@ -42,7 +42,7 @@ def main():
     "YPFD","EWZ","TEN","XLE","S30J5","YMCJO","S15G5","T17O5","T15D5","TZX26",
     "BBD","ABEV","GD35","GD30","GD41","CEPU","S30Y5","VALE","VIST","GOOGL",
     "TTJ26","TTM26","DE","PBR","JPM","NKE","TM","AL41","AL35","T2X4"]
-    
+
     df = get_cotizaciones(tickers, start_date="2024-01-01")
     print("Final shape:", df.shape)
 
